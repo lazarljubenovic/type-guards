@@ -11,7 +11,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build:es2015": "tsc -p tsconfig.json",
+    "build:es2015": "tsc -p tsconfig.es2015.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "rm -rf dist && yarn build:es2015 && yarn build:cjs",
     "test": "mocha -r ts-node/register src/**/*.spec.ts"

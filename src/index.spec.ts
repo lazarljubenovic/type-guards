@@ -1,5 +1,6 @@
 import {expect} from 'chai'
 import * as tg from './index'
+import {describe, it} from 'mocha'
 
 // tslint:disable-next-line
 function noop (...args: any[]) {
