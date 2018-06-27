@@ -50,8 +50,12 @@ describe(`oneOf`, () => {
 
 describe(`isInstanceOf`, () => {
   it(`works as expected`, () => {
-    class Foo {}
-    class Bar {}
+    class Foo {
+    }
+
+    class Bar {
+    }
+
     const isFoo = tg.isInstanceOf(Foo)
     const isBar = tg.isInstanceOf(Bar)
     const foo = new Foo()
@@ -189,8 +193,8 @@ describe(`isObjectOfShape`, () => {
       foo: tg.isArrayOf(tg.isNumber),
       bar: {
         baz: tg.isString,
-        qux: tg.oneOf(tg.isNull, tg.isBoolean)
-      }
+        qux: tg.oneOf(tg.isNull, tg.isBoolean),
+      },
     })
     it(`returns true for an object matching the shape`, () => {
       const input = {foo: [1, 2], bar: {baz: 'baz', qux: true}}
@@ -246,5 +250,25 @@ describe(`omit`, () => {
     expect(subType({a})).to.equal(false, `Extra "a", missing "b" and "c".`)
     expect(subType({b, c})).to.equal(true)
     expect(subType({b})).to.equal(false, `Missing "c".`)
+  })
+})
+
+describe(`partial`, () => {
+  const a = 'a', b = 'b', c = 'c'
+  const superType = tg.isOfShape({a: tg.isString, b: tg.isString, c: tg.isString})
+  const subType = tg.partial(superType)
+  it(`allows the full type`, () => {
+    expect(subType({a, b, c})).to.equal(true)
+  })
+  it(`allows a partial type`, () => {
+    expect(subType({a, b, c: undefined})).to.equal(true)
+  })
+  it(`allows "empty" object`, () => {
+    expect(subType({a: undefined, b: undefined, c: undefined})).to.equal(true)
+  })
+  it(`doesn't allow random stuff like arrays of numbers`, () => {
+    expect(subType([])).to.equal(false, `Array`)
+    expect(subType(0)).to.equal(false, `Number`)
+    expect(subType('a')).to.equal(false, `String`)
   })
 })

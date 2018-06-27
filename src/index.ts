@@ -23,7 +23,7 @@ export type Predicate = (input: any) => boolean
 
 export type Shape<T extends Dict> = { [key in keyof T]: T[key] extends Dict ? Shape<T[key]> : Guard<T> }
 export type Guard<T> = (input: any) => input is T
-export type GuardWithShape<T> = Guard<T> & {shape: Shape<T>}
+export type GuardWithShape<T> = Guard<T> & { shape: Shape<T> }
 
 export function oneOf<A> (a: Guard<A>): Guard<A>
 export function oneOf<A, B> (a: Guard<A>, b: Guard<B>): Guard<A | B>
@@ -195,4 +195,15 @@ export function omit<T extends Dict> (guard: GuardWithShape<T>, ...keys: Array<k
     }
   }
   return isOfShape(resultingShape)
+}
+
+/**
+ * Allows every value in a shape to be undefined.
+ */
+export function partial<T extends Dict> (guard: GuardWithShape<T>): GuardWithShape<Partial<T>> {
+  const resultShape: any = {}
+  for (const key of Object.keys(guard.shape)) {
+    resultShape[key] = oneOf(isUndefined, guard.shape[key] as any)
+  }
+  return isOfShape(resultShape)
 }
