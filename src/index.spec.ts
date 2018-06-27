@@ -48,6 +48,18 @@ describe(`oneOf`, () => {
   })
 })
 
+describe(`isInstanceOf`, () => {
+  it(`works as expected`, () => {
+    class Foo {}
+    class Bar {}
+    const isFoo = tg.isInstanceOf(Foo)
+    const isBar = tg.isInstanceOf(Bar)
+    const foo = new Foo()
+    expect(isFoo(foo)).to.equal(true)
+    expect(isBar(foo)).to.equal(false)
+  })
+})
+
 describe(`isNull`, () => {
   it(`returns true when null is passed`, () => {
     expect(tg.isNull(null)).to.equal(true)
