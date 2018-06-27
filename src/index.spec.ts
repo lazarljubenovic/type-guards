@@ -204,23 +204,35 @@ describe(`isObjectOfShape`, () => {
 })
 
 describe(`pick`, () => {
+  const a = 'a', b = 'b', c = 'c'
   it(`grabs only one key from a larger shape`, () => {
     const superType = tg.isOfShape({a: tg.isString, b: tg.isString})
     const subType = tg.pick(superType, 'a')
-    expect(subType({a: 'a'})).to.equal(true)
-    expect(subType({a: 'a', b: 'b'})).to.equal(false)
+    expect(subType({a})).to.equal(true)
+    expect(subType({a, b})).to.equal(false)
   })
   it(`grabs a few keys from a larger shape`, () => {
     const superType = tg.isOfShape({a: tg.isString, b: tg.isString, c: tg.isString, d: tg.isString})
     const subType = tg.pick(superType, 'a', 'b')
-    expect(subType({a: 'a'})).to.equal(false, `Missing "b".`)
-    expect(subType({a: 'a', b: 'b'})).to.equal(true)
-    expect(subType({a: 'a', b: 'b', c: 'c'})).to.equal(false, `Extra "c".`)
+    expect(subType({a})).to.equal(false, `Missing "b".`)
+    expect(subType({a, b})).to.equal(true)
+    expect(subType({a, b, c})).to.equal(false, `Extra "c".`)
   })
   it(`grabs everything from a larger shape`, () => {
     const superType = tg.isOfShape({a: tg.isString, b: tg.isString})
     const subType = tg.pick(superType, 'a', 'b')
-    expect(subType({a: 'a'})).to.equal(false, `Missing "a".`)
-    expect(subType({a: 'a', b: 'b'})).to.equal(true)
+    expect(subType({a})).to.equal(false, `Missing "a".`)
+    expect(subType({a, b})).to.equal(true)
+  })
+})
+
+describe(`omit`, () => {
+  const a = 'a', b = 'b', c = 'c'
+  it(`omits one key from a larger shape`, () => {
+    const superType = tg.isOfShape({a: tg.isString, b: tg.isString, c: tg.isString})
+    const subType = tg.omit(superType, 'a')
+    expect(subType({a})).to.equal(false, `Extra "a", missing "b" and "c".`)
+    expect(subType({b, c})).to.equal(true)
+    expect(subType({b})).to.equal(false, `Missing "c".`)
   })
 })

@@ -17,7 +17,7 @@ export type StringToBasic<T extends BasicString> =
           T extends 'object' ? object :
             never
 
-
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Dict = { [key: string]: any }
 export type Predicate = (input: any) => boolean
 
@@ -143,10 +143,22 @@ export function pick<T extends Dict, K1 extends keyof T> (guard: GuardWithShape<
 export function pick<T extends Dict, K1 extends keyof T, K2 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2): GuardWithShape<Pick<T, K1 | K2>>
 export function pick<T extends Dict, K1 extends keyof T, K2 extends keyof T, K3 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2, key3: K3): GuardWithShape<Pick<T, K1 | K2 | K3>>
 export function pick<T extends Dict> (guard: GuardWithShape<T>, ...keys: Array<keyof T>): GuardWithShape<Partial<T>> {
-  if (guard.shape == null) throw new Error(`The first argument of "pick" must be a shape guard.`)
   const resultingShape: any = {}
   for (const key of keys) {
     resultingShape[key] = guard.shape[key]
+  }
+  return isOfShape(resultingShape)
+}
+
+export function omit<T extends Dict, K1 extends keyof T> (guard: GuardWithShape<T>, key1: K1): GuardWithShape<Omit<T, K1>>
+export function omit<T extends Dict, K1 extends keyof T, K2 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2): GuardWithShape<Omit<T, K1 | K2>>
+export function omit<T extends Dict, K1 extends keyof T, K2 extends keyof T, K3 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2, key3: K3): GuardWithShape<Omit<T, K1 | K2 | K3>>
+export function omit<T extends Dict> (guard: GuardWithShape<T>, ...keys: Array<keyof T>): GuardWithShape<Partial<T>> {
+  const resultingShape: any = {}
+  for (const key of Object.keys(guard.shape)) {
+    if (keys.indexOf(key) == -1) {
+      resultingShape[key] = guard.shape[key]
+    }
   }
   return isOfShape(resultingShape)
 }
