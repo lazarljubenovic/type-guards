@@ -45,7 +45,7 @@ const isAbc = oneOf(is('a'), is('b'), is('c'))
 isAbc('a') // => true
 isAbc('b') // => true
 isAbc('c') // => true
-isAbc('d') // => true
+isAbc('d') // => false
 ```
 
 ### `isEnum`
@@ -163,6 +163,7 @@ const partOfUser2 = isOfShape({ name: one(isUndefined, isString), age: oneOf(isU
 Note, however:
 
 ```ts
+const partOfUser = partial(fullUser)
 partOfUser({ name: 'John', age: 21 }) // => true
 partOfUser({ name: 'John' }) // => false (missing "age")
 partOfUser({ name: 'John', age: undefined }) => true 
@@ -175,10 +176,10 @@ Currently working on making the second one return `true` as well.
 If you do not need to use the validator, but only want the type information, you can do that as well.
 
 ```ts
-FromGuard<typeof isNumber> // : number
+type Number = FromGuard<typeof isNumber> // : number
 
-const isUser = isOfShape({ name: isstring, age: isNumber })
-FromGuard<typeof isUser> // : { name: string, age: number }
+const isUser = isOfShape({ name: isString, age: isNumber })
+type User = FromGuard<typeof isUser> // : { name: string, age: number }
 ```
 
 This means that your codebase can have validators "just in case", but if you never use them, it will not increase your bundle size.
