@@ -118,8 +118,6 @@ export function isArrayOf<T> (itemGuard: Guard<T>): Guard<T[]> {
 /**
  * Create a validator that asserts that passed argument is an object of a certain shape.
  * Accepts an object of guards.
- *
- * @param shape
  */
 export function isOfShape<T extends Dict> (shape: Shape<T>): GuardWithShape<T> {
   const fn: any = (input: any): input is T => {
@@ -139,6 +137,20 @@ export function isOfShape<T extends Dict> (shape: Shape<T>): GuardWithShape<T> {
   return fn as GuardWithShape<T>
 }
 
+/**
+ * Create a validator which modifies an existing shape guard. Allows you to pick
+ * one or more keys which you want to keep from the object, and discard others.
+ *
+ * If you want to keep a lot of keys, check out `omit`.
+ *
+ * @example
+ * The following two asserts result in the same guard.
+ *
+ * ```ts
+ * const assert1 = isOfShape({a: isNumber})
+ * const assert2 = pick(isOfShape({a: isNumber, b: isString}, 'a')
+ * ```
+ */
 export function pick<T extends Dict, K1 extends keyof T> (guard: GuardWithShape<T>, key1: K1): GuardWithShape<Pick<T, K1>>
 export function pick<T extends Dict, K1 extends keyof T, K2 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2): GuardWithShape<Pick<T, K1 | K2>>
 export function pick<T extends Dict, K1 extends keyof T, K2 extends keyof T, K3 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2, key3: K3): GuardWithShape<Pick<T, K1 | K2 | K3>>
@@ -150,6 +162,21 @@ export function pick<T extends Dict> (guard: GuardWithShape<T>, ...keys: Array<k
   return isOfShape(resultingShape)
 }
 
+
+/**
+ * Create a validator which modifies an existing shape guard. Allows you to omit
+ * one or more keys which you want to remove form the object, and keep others.
+ *
+ * If you want to discard a lot of keys, check out `pick`.
+ *
+ * @example
+ * The following two asserts result in the same guard.
+ *
+ * ```ts
+ * const assert1 = isOfShape({a: isNumber})
+ * const assert2 = omit(isOfShape({a: isNumber, b: isString}, 'b')
+ * ```
+ */
 export function omit<T extends Dict, K1 extends keyof T> (guard: GuardWithShape<T>, key1: K1): GuardWithShape<Omit<T, K1>>
 export function omit<T extends Dict, K1 extends keyof T, K2 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2): GuardWithShape<Omit<T, K1 | K2>>
 export function omit<T extends Dict, K1 extends keyof T, K2 extends keyof T, K3 extends keyof T> (guard: GuardWithShape<T>, key1: K1, key2: K2, key3: K3): GuardWithShape<Omit<T, K1 | K2 | K3>>
