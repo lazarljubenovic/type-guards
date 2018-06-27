@@ -32,6 +32,20 @@ describe(`oneOf`, () => {
       expect(fn(5)).to.equal(false)
     })
   })
+  describe(`tertiary`, () => {
+    const isUndefined = (n: any): n is undefined => n === undefined
+    const isNull = (n: any): n is null => n === null
+    const isFalse = (n: any): n is false => n === false
+    const isVeryFalsy = tg.oneOf(isUndefined, isNull, isFalse)
+    it(`returns true when one of the conditions is true`, () => {
+      expect(isVeryFalsy(null)).to.equal(true)
+      expect(isVeryFalsy(undefined)).to.equal(true)
+      expect(isVeryFalsy(false)).to.equal(true)
+    })
+    it(`returns false when none of the conditions are true`, () => {
+      expect(isVeryFalsy(0)).to.equal(false)
+    })
+  })
 })
 
 describe(`isNull`, () => {
@@ -97,6 +111,18 @@ describe(`isBoolean`, () => {
   })
 })
 
+describe(`isEnum`, () => {
+  it(`returns true when it belongs to enum`, () => {
+    expect(tg.isEnum(1, 2, 3)(1)).to.equal(true)
+  })
+  it(`returns false when it does not belong to enum`, () => {
+    expect(tg.isEnum(1, 2, 3)(4)).to.equal(false)
+  })
+  it(`always returns false for an empty enum`, () => {
+    expect(tg.isEnum()(0)).to.equal(false)
+  })
+})
+
 describe(`isArrayOf`, () => {
   describe(`isNumber`, () => {
     it(`returns true when array of numbers is passed`, () => {
@@ -129,11 +155,14 @@ describe(`isObjectOfShape`, () => {
     it(`returns true for an object matching the shape`, () => {
       expect(assert({foo: 1})).to.equal(true)
     })
-    it(`returns true for an object matching the shape with additional props`, () => {
-      expect(assert({foo: 1, bar: 2})).to.equal(true)
+    it(`returns false for an object matching the shape with additional props`, () => {
+      expect(assert({foo: 1, bar: 2})).to.equal(false)
     })
     it(`returns false for an object which does not match the shape`, () => {
       expect(assert({bar: 2})).to.equal(false)
+    })
+    it(`doesn't allow extra keys`, () => {
+      expect(assert({foo: 1, bar: 2})).to.equal(false)
     })
     it(`is correctly typed`, () => {
       const input: any = {foo: 1}
@@ -167,17 +196,31 @@ describe(`isObjectOfShape`, () => {
       const input = {foo: [1], bar: {bar: 'baz', qux: undefined}}
       expect(assert(input)).to.equal(false)
     })
+    it(`doesn't allow extra nested keys`, () => {
+      const input = {foo: [], bar: {baz: 'baz', qux: true, test: 'test'}}
+      expect(assert(input)).to.equal(false)
+    })
   })
 })
 
-describe(`isEnum`, () => {
-  it(`returns true when it belongs to enum`, () => {
-    expect(tg.isEnum(1, 2, 3)(1)).to.equal(true)
+describe(`pick`, () => {
+  it(`grabs only one key from a larger shape`, () => {
+    const superType = tg.isOfShape({a: tg.isString, b: tg.isString})
+    const subType = tg.pick(superType, 'a')
+    expect(subType({a: 'a'})).to.equal(true)
+    expect(subType({a: 'a', b: 'b'})).to.equal(false)
   })
-  it(`returns false when it does not belong to enum`, () => {
-    expect(tg.isEnum(1, 2, 3)(4)).to.equal(false)
+  it(`grabs a few keys from a larger shape`, () => {
+    const superType = tg.isOfShape({a: tg.isString, b: tg.isString, c: tg.isString, d: tg.isString})
+    const subType = tg.pick(superType, 'a', 'b')
+    expect(subType({a: 'a'})).to.equal(false, `Missing "b".`)
+    expect(subType({a: 'a', b: 'b'})).to.equal(true)
+    expect(subType({a: 'a', b: 'b', c: 'c'})).to.equal(false, `Extra "c".`)
   })
-  it(`always returns false for an empty enum`, () => {
-    expect(tg.isEnum()(0)).to.equal(false)
+  it(`grabs everything from a larger shape`, () => {
+    const superType = tg.isOfShape({a: tg.isString, b: tg.isString})
+    const subType = tg.pick(superType, 'a', 'b')
+    expect(subType({a: 'a'})).to.equal(false, `Missing "a".`)
+    expect(subType({a: 'a', b: 'b'})).to.equal(true)
   })
 })
