@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/tasks.xml
+yarn-error.log
