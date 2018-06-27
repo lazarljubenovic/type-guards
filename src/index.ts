@@ -21,6 +21,29 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Dict = { [key: string]: any }
 export type Predicate = (input: any) => boolean
 
+/**
+ * A helper which allows you to utilize the type of validator without using the validator itself.
+ *
+ * @example
+ * ```ts
+ * type NumberType = FromGuard<typeof isNumber>
+ * ```
+ *
+ * @example
+ * ```ts
+ * const isUser = isOfShape({
+ *   name: isString,
+ *   age: isNumber,
+ * })
+ * type UserType = FromGuard<typeof isUser>
+ * // same as:
+ * type UserType2 = { name: string, age: number }
+ * ```
+ */
+export type FromGuard<T> = T extends GuardWithShape<infer V> ? V :
+  T extends Guard<infer W> ? W :
+    null
+
 export type Shape<T extends Dict> = { [key in keyof T]: T[key] extends Dict ? Shape<T[key]> : Guard<T> }
 export type Guard<T> = (input: any) => input is T
 export type GuardWithShape<T> = Guard<T> & { shape: Shape<T> }
