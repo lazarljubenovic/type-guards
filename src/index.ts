@@ -141,6 +141,8 @@ export function isEnum (...enums: Basic[]) {
  * Create a validator that asserts that passed argument is an array. Accepts another
  * type guard which is used for every item of the array.
  */
+export function isArrayOf<T extends Dict> (itemGuard: GuardWithShape<T>): GuardWithShape<T[]>
+export function isArrayOf<T> (itemGuard: Guard<T>): Guard<T[]>
 export function isArrayOf<T> (itemGuard: Guard<T>): Guard<T[]> {
   return ((input: any) => Array.isArray(input) && input.every(itemGuard)) as Guard<T[]>
 }
