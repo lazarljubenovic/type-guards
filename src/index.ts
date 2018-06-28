@@ -44,9 +44,10 @@ export type FromGuard<T> = T extends GuardWithShape<infer V> ? V :
   T extends Guard<infer W> ? W :
     null
 
-export type Shape<T extends Dict> = { [key in keyof T]: T[key] extends Dict ? Shape<T[key]> : Guard<T> }
 export type Guard<T> = (input: any) => input is T
 export type GuardWithShape<T> = Guard<T> & { shape: Shape<T> }
+export type GuardOrShape<T> = T extends Dict ? Shape<T> : Guard<T>
+export type Shape<T extends Dict> = { [key in keyof T]: GuardOrShape<T[key]> }
 
 export function oneOf<A> (a: Guard<A>): Guard<A>
 export function oneOf<A, B> (a: Guard<A>, b: Guard<B>): Guard<A | B>
