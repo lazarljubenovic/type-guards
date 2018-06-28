@@ -181,9 +181,8 @@ describe(`isObjectOfShape`, () => {
       expect(assert({foo: 1, bar: 2})).to.equal(false)
     })
     it(`is correctly typed`, () => {
-      const input: any = {foo: 1}
-      const ok = assert(input)
-      if (ok) {
+      let input: {}
+      if (assert(input)) {
         noop(input.foo)
       }
     })
