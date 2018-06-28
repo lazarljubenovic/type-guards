@@ -1,5 +1,6 @@
 export type BasicString = 'string' | 'boolean' | 'number' | 'object' | 'function'
-export type Basic = string | boolean | number | object | Function
+export type Primitive = string | boolean | number
+export type Basic = Primitive | object | Function
 
 export type BasicToString<T extends Basic> =
   T extends string ? 'string' :
@@ -18,7 +19,7 @@ export type StringToBasic<T extends BasicString> =
             never
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-export type Dict = { [key: string]: any }
+export type Dict = Record<string, any>
 export type Predicate = (input: any) => boolean
 
 /**
@@ -46,8 +47,13 @@ export type FromGuard<T> = T extends GuardWithShape<infer V> ? V :
 
 export type Guard<T> = (input: any) => input is T
 export type GuardWithShape<T> = Guard<T> & { shape: Shape<T> }
-export type GuardOrShape<T> = T extends Dict ? Shape<T> : Guard<T>
+
+export type GuardOrShape<T> = T extends Primitive ? Guard<T> : Shape<T>
 export type Shape<T extends Dict> = { [key in keyof T]: GuardOrShape<T[key]> }
+
+export type Unguard<T> = T extends Guard<infer V> ? V : never
+export type Unshape<T extends Dict> = { [key in keyof T]: UnshapeOrUnguard<T[key]> }
+export type UnshapeOrUnguard<T> = T extends Primitive ? never : T extends Guard<any> ? Unguard<T> : Unshape<T>
 
 export function oneOf<A> (a: Guard<A>): Guard<A>
 export function oneOf<A, B> (a: Guard<A>, b: Guard<B>): Guard<A | B>
@@ -152,11 +158,12 @@ export function isArrayOf<T> (itemGuard: Guard<T>): Guard<T[]> {
  * Create a validator that asserts that passed argument is an object of a certain shape.
  * Accepts an object of guards.
  */
-export function isOfShape<T extends Dict> (shape: Shape<T>): GuardWithShape<T> {
+export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>>(shape: T): GuardWithShape<Unshape<T>> 
+export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>> (shape: T): GuardWithShape<Unshape<T>> {
   const fn: any = (input: any): input is T => {
     if (typeof input != 'object') return false
     const isNothingMissing = Object.keys(shape).every((key) => {
-      const keyGuard = shape[key]
+      const keyGuard: any = (shape as any)[key]
       if (typeof keyGuard == 'function') {
         return key in input && (keyGuard as any)(input[key])
       } else if (typeof keyGuard == 'object') {
@@ -167,7 +174,7 @@ export function isOfShape<T extends Dict> (shape: Shape<T>): GuardWithShape<T> {
     return Object.keys(input).length == Object.keys(shape).length
   }
   fn.shape = shape
-  return fn as GuardWithShape<T>
+  return fn as GuardWithShape<Unshape<T>>
 }
 
 /**
@@ -192,7 +199,7 @@ export function pick<T extends Dict> (guard: GuardWithShape<T>, ...keys: Array<k
   for (const key of keys) {
     resultingShape[key] = guard.shape[key]
   }
-  return isOfShape(resultingShape)
+  return isOfShape(resultingShape) as any
 }
 
 
@@ -220,7 +227,7 @@ export function omit<T extends Dict> (guard: GuardWithShape<T>, ...keys: Array<k
       resultingShape[key] = guard.shape[key]
     }
   }
-  return isOfShape(resultingShape)
+  return isOfShape(resultingShape) as any
 }
 
 /**
@@ -231,5 +238,5 @@ export function partial<T extends Dict> (guard: GuardWithShape<T>): GuardWithSha
   for (const key of Object.keys(guard.shape)) {
     resultShape[key] = oneOf(isUndefined, guard.shape[key] as any)
   }
-  return isOfShape(resultShape)
+  return isOfShape(resultShape) as any
 }

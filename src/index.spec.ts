@@ -181,9 +181,11 @@ describe(`isObjectOfShape`, () => {
       expect(assert({foo: 1, bar: 2})).to.equal(false)
     })
     it(`is correctly typed`, () => {
-      let input: {}
+      let input: {} = {}
       if (assert(input)) {
-        noop(input.foo)
+        try {
+          noop(input.foo.toExponential())
+        } catch { }
       }
     })
   })
@@ -214,6 +216,15 @@ describe(`isObjectOfShape`, () => {
     it(`doesn't allow extra nested keys`, () => {
       const input = {foo: [], bar: {baz: 'baz', qux: true, test: 'test'}}
       expect(assert(input)).to.equal(false)
+    })
+    it(`is correctly typed`, () => {
+      let input: {} = {}
+      if (assert(input)) {
+        try {
+          noop(input.foo[0].toExponential())
+          noop(input.bar.baz.charAt(0))
+        } catch { }
+      }
     })
   })
 })
