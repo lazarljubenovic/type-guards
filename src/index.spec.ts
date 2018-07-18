@@ -6,48 +6,6 @@ import {describe, it} from 'mocha'
 function noop (...args: any[]) {
 }
 
-describe(`oneOf`, () => {
-  describe(`unary`, () => {
-    const isEven = (n: number): n is number => n % 2 == 0
-    const fn = tg.oneOf(isEven)
-    it(`returns true when the only condition is true`, () => {
-      expect(fn(2)).to.equal(true)
-    })
-    it(`returns false when the only condition is false`, () => {
-      expect(fn(3)).to.equal(false)
-    })
-  })
-  describe(`binary`, () => {
-    const isEven = (n: number): n is number => n % 2 == 0
-    const isGeTen = (n: number): n is number => n >= 10
-    const fn = tg.oneOf(isEven, isGeTen)
-    it(`returns true when both conditions are true`, () => {
-      expect(fn(12)).to.equal(true)
-    })
-    it(`returns true when only one condition is true`, () => {
-      expect(fn(2)).to.equal(true)
-      expect(fn(11)).to.equal(true)
-    })
-    it(`returns false when no conditions are true`, () => {
-      expect(fn(5)).to.equal(false)
-    })
-  })
-  describe(`tertiary`, () => {
-    const isUndefined = (n: any): n is undefined => n === undefined
-    const isNull = (n: any): n is null => n === null
-    const isFalse = (n: any): n is false => n === false
-    const isVeryFalsy = tg.oneOf(isUndefined, isNull, isFalse)
-    it(`returns true when one of the conditions is true`, () => {
-      expect(isVeryFalsy(null)).to.equal(true)
-      expect(isVeryFalsy(undefined)).to.equal(true)
-      expect(isVeryFalsy(false)).to.equal(true)
-    })
-    it(`returns false when none of the conditions are true`, () => {
-      expect(isVeryFalsy(0)).to.equal(false)
-    })
-  })
-})
-
 describe(`isInstanceOf`, () => {
   it(`works as expected`, () => {
     class Foo {
