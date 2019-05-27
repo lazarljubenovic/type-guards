@@ -57,6 +57,14 @@ For example, the validator form the previous example can be written in a more si
 const isAbc = isEnum('a', 'b', 'c')
 ```
 
+If all the arguments are of the same type, it will be inferred; so the above example will assert for string. If you have an enum, list all its values [somehow](https://github.com/Microsoft/TypeScript/issues/17198) in an array, and use the spread operator to pass the values in.
+
+```ts
+enum Gender { Male = 'm', Female = 'f' }
+const GENDERS = [ Gender.Male, Gender.Female ]
+const isGender = isEnum(...GENDERS) // a guard for type Gender
+```
+
 ### `isNull`
 
 A validator that asserts that the given argument is `null`. Short for `is(null)`

@@ -79,6 +79,8 @@ export const isObject = isOfBasicType('object')
  * It's a shorter way to say `oneIf(is('a'), is('b'), is('c'))` by saying
  * `isEnum('a', 'b', 'c')`.
  */
+export function isEnum<T> (...enums: T[]): Guard<T>
+export function isEnum (...enums: Basic[]): (input: any) => boolean
 export function isEnum (...enums: Basic[]) {
   return (input: any): boolean => {
     return enums.some(is(input))
