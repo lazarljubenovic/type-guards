@@ -1,6 +1,6 @@
-import {expect} from 'chai'
+import { expect } from 'chai'
 import * as tg from './index'
-import {describe, it} from 'mocha'
+import { describe, it } from 'mocha'
 import { assert, IsExact, IsNullable } from 'conditional-type-checks'
 
 // tslint:disable-next-line
@@ -39,7 +39,7 @@ describe(`isNotNull`, () => {
     expect(tg.isNotNull(null)).to.equal(false)
   })
   it(`brings the correct type`, () => {
-    const value: string | null = 0 as any
+    let value: string | null = stringOrNull()
     if (tg.isNotNull(value)) {
       assert<IsExact<typeof value, string>>(true)
       assert<IsNullable<typeof value>>(false)
@@ -58,7 +58,7 @@ describe(`isNotNullOrUndefined`, () => {
     expect(tg.isNotNullOrUndefined(null)).to.equal(false)
   })
   it(`brings the correct type`, () => {
-    const value: string | null | undefined = 0 as any
+    let value: string | null = stringOrNull()
     if (tg.isNotNullOrUndefined(value)) {
       assert<IsExact<typeof value, string>>(true)
       assert<IsNullable<typeof value>>(false)
@@ -164,25 +164,26 @@ describe(`isArrayOf`, () => {
 
 describe(`isObjectOfShape`, () => {
   describe(`asserting shape {foo: number}`, () => {
-    const assert = tg.isOfShape({foo: tg.isNumber})
+    const assert = tg.isOfShape({ foo: tg.isNumber })
     it(`returns true for an object matching the shape`, () => {
-      expect(assert({foo: 1})).to.equal(true)
+      expect(assert({ foo: 1 })).to.equal(true)
     })
     it(`returns false for an object matching the shape with additional props`, () => {
-      expect(assert({foo: 1, bar: 2})).to.equal(false)
+      expect(assert({ foo: 1, bar: 2 })).to.equal(false)
     })
     it(`returns false for an object which does not match the shape`, () => {
-      expect(assert({bar: 2})).to.equal(false)
+      expect(assert({ bar: 2 })).to.equal(false)
     })
     it(`doesn't allow extra keys`, () => {
-      expect(assert({foo: 1, bar: 2})).to.equal(false)
+      expect(assert({ foo: 1, bar: 2 })).to.equal(false)
     })
     it(`is correctly typed`, () => {
       let input: {} = {}
       if (assert(input)) {
         try {
           noop(input.foo.toExponential())
-        } catch { }
+        } catch {
+        }
       }
     })
   })
@@ -195,23 +196,23 @@ describe(`isObjectOfShape`, () => {
       },
     })
     it(`returns true for an object matching the shape`, () => {
-      const input = {foo: [1, 2], bar: {baz: 'baz', qux: true}}
+      const input = { foo: [1, 2], bar: { baz: 'baz', qux: true } }
       expect(assert(input)).to.equal(true)
     })
     it(`returns false for an object missing "qux"`, () => {
-      const input = {foo: [1, 2], bar: {baz: 'baz'}}
+      const input = { foo: [1, 2], bar: { baz: 'baz' } }
       expect(assert(input)).to.equal(false)
     })
     it(`returns false for wrong type of "foo"`, () => {
-      const input = {foo: 1, bar: {baz: 'baz', qux: false}}
+      const input = { foo: 1, bar: { baz: 'baz', qux: false } }
       expect(assert(input)).to.equal(false)
     })
     it(`returns false from wrong type of "baz"`, () => {
-      const input = {foo: [1], bar: {bar: 'baz', qux: undefined}}
+      const input = { foo: [1], bar: { bar: 'baz', qux: undefined } }
       expect(assert(input)).to.equal(false)
     })
     it(`doesn't allow extra nested keys`, () => {
-      const input = {foo: [], bar: {baz: 'baz', qux: true, test: 'test'}}
+      const input = { foo: [], bar: { baz: 'baz', qux: true, test: 'test' } }
       expect(assert(input)).to.equal(false)
     })
     it(`is correctly typed`, () => {
@@ -220,7 +221,8 @@ describe(`isObjectOfShape`, () => {
         try {
           noop(input.foo[0].toExponential())
           noop(input.bar.baz.charAt(0))
-        } catch { }
+        } catch {
+        }
       }
     })
   })
@@ -229,49 +231,49 @@ describe(`isObjectOfShape`, () => {
 describe(`pick`, () => {
   const a = 'a', b = 'b', c = 'c'
   it(`grabs only one key from a larger shape`, () => {
-    const superType = tg.isOfShape({a: tg.isString, b: tg.isString})
+    const superType = tg.isOfShape({ a: tg.isString, b: tg.isString })
     const subType = tg.pick(superType, 'a')
-    expect(subType({a})).to.equal(true)
-    expect(subType({a, b})).to.equal(false)
+    expect(subType({ a })).to.equal(true)
+    expect(subType({ a, b })).to.equal(false)
   })
   it(`grabs a few keys from a larger shape`, () => {
-    const superType = tg.isOfShape({a: tg.isString, b: tg.isString, c: tg.isString, d: tg.isString})
+    const superType = tg.isOfShape({ a: tg.isString, b: tg.isString, c: tg.isString, d: tg.isString })
     const subType = tg.pick(superType, 'a', 'b')
-    expect(subType({a})).to.equal(false, `Missing "b".`)
-    expect(subType({a, b})).to.equal(true)
-    expect(subType({a, b, c})).to.equal(false, `Extra "c".`)
+    expect(subType({ a })).to.equal(false, `Missing "b".`)
+    expect(subType({ a, b })).to.equal(true)
+    expect(subType({ a, b, c })).to.equal(false, `Extra "c".`)
   })
   it(`grabs everything from a larger shape`, () => {
-    const superType = tg.isOfShape({a: tg.isString, b: tg.isString})
+    const superType = tg.isOfShape({ a: tg.isString, b: tg.isString })
     const subType = tg.pick(superType, 'a', 'b')
-    expect(subType({a})).to.equal(false, `Missing "a".`)
-    expect(subType({a, b})).to.equal(true)
+    expect(subType({ a })).to.equal(false, `Missing "a".`)
+    expect(subType({ a, b })).to.equal(true)
   })
 })
 
 describe(`omit`, () => {
   const a = 'a', b = 'b', c = 'c'
   it(`omits one key from a larger shape`, () => {
-    const superType = tg.isOfShape({a: tg.isString, b: tg.isString, c: tg.isString})
+    const superType = tg.isOfShape({ a: tg.isString, b: tg.isString, c: tg.isString })
     const subType = tg.omit(superType, 'a')
-    expect(subType({a})).to.equal(false, `Extra "a", missing "b" and "c".`)
-    expect(subType({b, c})).to.equal(true)
-    expect(subType({b})).to.equal(false, `Missing "c".`)
+    expect(subType({ a })).to.equal(false, `Extra "a", missing "b" and "c".`)
+    expect(subType({ b, c })).to.equal(true)
+    expect(subType({ b })).to.equal(false, `Missing "c".`)
   })
 })
 
 describe(`partial`, () => {
   const a = 'a', b = 'b', c = 'c'
-  const superType = tg.isOfShape({a: tg.isString, b: tg.isString, c: tg.isString})
+  const superType = tg.isOfShape({ a: tg.isString, b: tg.isString, c: tg.isString })
   const subType = tg.partial(superType)
   it(`allows the full type`, () => {
-    expect(subType({a, b, c})).to.equal(true)
+    expect(subType({ a, b, c })).to.equal(true)
   })
   it(`allows a partial type`, () => {
-    expect(subType({a, b, c: undefined})).to.equal(true)
+    expect(subType({ a, b, c: undefined })).to.equal(true)
   })
   it(`allows "empty" object`, () => {
-    expect(subType({a: undefined, b: undefined, c: undefined})).to.equal(true)
+    expect(subType({ a: undefined, b: undefined, c: undefined })).to.equal(true)
   })
   it(`doesn't allow random stuff like arrays of numbers`, () => {
     expect(subType([])).to.equal(false, `Array`)
@@ -279,3 +281,7 @@ describe(`partial`, () => {
     expect(subType('a')).to.equal(false, `String`)
   })
 })
+
+function stringOrNull (): string | null {
+  return Math.random() > 0.5 ? '' : null
+}

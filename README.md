@@ -73,10 +73,26 @@ A validator that asserts that the given argument is `null`. Short for `is(null)`
 
 A validator that asserts that the given argument is `undefined`. Short for `is(undefined)`.
 
-### `isNullOrUndefined`
+### `isNullOrUndefined`, `isNullish`
 
 A validator that asserts that the given argument is `null` or `undefined` (like doing `arg == null`).
-Short for `oneOf(is(null), is(undefined))`
+Short for `oneOf(is(null), is(undefined))`.
+
+An alias with a shorten yet recognizable name is `isNullish`.
+
+### `isNotNull`, `isNotUndefined`, `isNotNullOrUndefined`, `isNotNullish`
+
+The opposite of the previous three validators.
+
+A common use-case is filtering an array to get rid of nullish values:
+
+```ts
+const array: Array<number | null | undefined> = [0, null, 1, undefined, 2]
+const filtered = array.filter(tg.isNotNullish)
+// type of `filtered` is `Array<number>`
+```
+
+[Doesn't work perfectly](https://stackoverflow.com/questions/56949854/a-not-null-type-guard-resolves-to-never-in-the-else-branch) with the `else` branch, but this is a less common use-case. Either way, help is appreciated in the SO thread if you know more about this.
 
 ### `isOfBasicType`
 

@@ -43,17 +43,42 @@ export const isUndefined: (arg: any) => arg is undefined = is(undefined)
  */
 export const isNullOrUndefined = oneOf(isNull, isUndefined)
 
+/**
+ * Alias for isNullOrUndefined.
+ * Just like `input == null`.
+ */
+export const isNullish = isNotNullOrUndefined
+
+/**
+ * Create a validator that asserts the passed argument is not `null`,
+ * just like `input !== null`.
+ */
 export function isNotNull<T> (arg: T): arg is Exclude<T, null> {
   return arg !== null
 }
 
+/**
+ * Create a validator that asserts the passed argument is not `undefined`,
+ * just like `input !== undefined`.
+ */
 export function isNotUndefined<T> (arg: T): arg is Exclude<T, undefined> {
   return arg !== undefined
 }
 
+/**
+ * Create a validator that asserts the passed argument is neither `null` or `undefined`,
+ * just like `input != null`.
+ * @param arg
+ */
 export function isNotNullOrUndefined<T> (arg: T): arg is Exclude<T, null | undefined> {
   return arg !== null && arg !== undefined
 }
+
+/**
+ * Alias for isNotNullOrUndefined.
+ * Just like `input != null`.
+ */
+export const isNotNullish = isNotNullOrUndefined
 
 /**
  * Create a validator that asserts the passed argument is of type `'number'`,
