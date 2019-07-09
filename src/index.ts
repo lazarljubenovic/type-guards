@@ -1,5 +1,6 @@
 import * as fp from './fp'
-import { BasicString, Guard, StringToBasic, Basic, GuardWithShape, Dict, Shape, Unshape, Omit } from './types'
+import { Basic, BasicString, Dict, Guard, GuardWithShape, Omit, Shape, StringToBasic, Unshape } from './types'
+
 export { Guard, GuardWithShape, Dict, Shape, Omit }
 
 export const oneOf = fp.or
@@ -7,6 +8,10 @@ export { fp }
 
 export function is<T> (t: T) {
   return (input: any): input is T => input === t
+}
+
+export function isNot<T, N extends T> (not: N) {
+  return (input: T): input is Exclude<T, N> => input !== not
 }
 
 export function isOfBasicType<T extends BasicString> (basicString: T): Guard<StringToBasic<T>> {
@@ -37,6 +42,18 @@ export const isUndefined: (arg: any) => arg is undefined = is(undefined)
  * just like `input == null`.
  */
 export const isNullOrUndefined = oneOf(isNull, isUndefined)
+
+export function isNotNull<T> (arg: T): arg is Exclude<T, null> {
+  return arg !== null
+}
+
+export function isNotUndefined<T> (arg: T): arg is Exclude<T, undefined> {
+  return arg !== undefined
+}
+
+export function isNotNullOrUndefined<T> (arg: T): arg is Exclude<T, null | undefined> {
+  return arg !== null && arg !== undefined
+}
 
 /**
  * Create a validator that asserts the passed argument is of type `'number'`,

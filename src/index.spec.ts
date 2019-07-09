@@ -1,6 +1,7 @@
 import {expect} from 'chai'
 import * as tg from './index'
 import {describe, it} from 'mocha'
+import { assert, IsExact, IsNullable } from 'conditional-type-checks'
 
 // tslint:disable-next-line
 function noop (...args: any[]) {
@@ -28,6 +29,44 @@ describe(`isNull`, () => {
   })
   it(`returns false when undefined is passed`, () => {
     expect(tg.isNull(undefined)).to.equal(false)
+  })
+})
+
+describe(`isNotNull`, () => {
+  it(`works`, () => {
+    expect(tg.isNotNull(0)).to.equal(true)
+    expect(tg.isNotNull(undefined)).to.equal(true)
+    expect(tg.isNotNull(null)).to.equal(false)
+  })
+  it(`brings the correct type`, () => {
+    const value: string | null = 0 as any
+    if (tg.isNotNull(value)) {
+      assert<IsExact<typeof value, string>>(true)
+      assert<IsNullable<typeof value>>(false)
+    } else {
+      assert<IsExact<typeof value, never>>(true) // https://stackoverflow.com/q/56949854/2131286
+      // assert<IsExact<typeof value, string | null>>(true)
+      // assert<IsNullable<typeof value>>(true)
+    }
+  })
+})
+
+describe(`isNotNullOrUndefined`, () => {
+  it(`works`, () => {
+    expect(tg.isNotNullOrUndefined(0)).to.equal(true)
+    expect(tg.isNotNullOrUndefined(undefined)).to.equal(false)
+    expect(tg.isNotNullOrUndefined(null)).to.equal(false)
+  })
+  it(`brings the correct type`, () => {
+    const value: string | null | undefined = 0 as any
+    if (tg.isNotNullOrUndefined(value)) {
+      assert<IsExact<typeof value, string>>(true)
+      assert<IsNullable<typeof value>>(false)
+    } else {
+      assert<IsExact<typeof value, never>>(true) // https://stackoverflow.com/q/56949854/2131286
+      // assert<IsExact<typeof value, string | null>>(true)
+      // assert<IsNullable<typeof value>>(true)
+    }
   })
 })
 

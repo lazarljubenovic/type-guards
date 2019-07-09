@@ -60,6 +60,11 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
+conditional-type-checks@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/conditional-type-checks/-/conditional-type-checks-1.0.1.tgz#0905a8631ea11bf155e7a6edb6d6b55c2e50520e"
+  integrity sha512-+O/IE/QGjXzdk4ttJFLRQm8pofQE0KZZmgcamquUGhHfaZt0UTZMlklqW0J9tWO8HQvC70cPahEAVMwSfeqtuQ==
+
 debug@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
