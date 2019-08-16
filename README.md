@@ -18,13 +18,13 @@ const isUser = tg.isOfShape({
   age: tg.isNumber,
 })
 
-// we purposly mark it as "any" to immitate API response or user's input
+// we purposely mark it as "any" to imitate API response or user's input
 // (anything generated at runtime which we cannot give a static type to)
 const john: any = { name: 'John', age: 21 }
 
 if (isUser(john)) {
   john.name // typesafe, this is a string
-  jogn.age // typesafe, this is a number
+  john.age // typesafe, this is a number
   john.years // error
 }
 ```
