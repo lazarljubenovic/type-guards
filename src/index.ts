@@ -1,7 +1,7 @@
 import * as fp from './fp'
-import { Basic, BasicString, Dict, Guard, GuardWithShape, Omit, Shape, StringToBasic, Unshape } from './types'
+import { Basic, BasicString, Dict, Guard, GuardWithShape, Omit, Shape, StringToBasic, Unshape, FromGuard } from './types'
 
-export { Guard, GuardWithShape, Dict, Shape, Omit }
+export { Guard, GuardWithShape, Dict, Shape, Omit, FromGuard }
 
 export const oneOf = fp.or
 export { fp }
