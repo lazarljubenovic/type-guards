@@ -21,7 +21,7 @@ export function isOfBasicType<T extends BasicString> (basicString: T): Guard<Str
 /**
  * Create a validator that asserts the passed argument is instance of the given constructor.
  */
-export function isInstanceOf<T> (ctor: new (...args: any[]) => T) {
+export function isInstanceOf<T> (ctor: (new (...args: any[]) => T) | (Function & {prototype: T})) {
   return (input => input instanceof ctor) as (x: any) => x is T
 }
 
