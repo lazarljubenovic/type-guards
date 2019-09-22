@@ -21,6 +21,19 @@ describe(`isInstanceOf`, () => {
     expect(isFoo(foo)).to.equal(true)
     expect(isBar(foo)).to.equal(false)
   })
+  it(`works with abstract class`, () => {
+    abstract class Foo {
+    }
+
+    class Bar extends Foo {
+    }
+
+    const isFoo = tg.isInstanceOf(Foo)
+    const isBar = tg.isInstanceOf(Bar)
+    const bar = new Bar()
+    expect(isFoo(bar)).to.equal(true)
+    expect(isBar(bar)).to.equal(true)
+  })
 })
 
 describe(`isNull`, () => {
