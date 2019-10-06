@@ -36,12 +36,12 @@ if (isUser(john)) {
 Create a validator that asserts that the given argument is strictly equal (`===`) to something.
 Not very useful on its own.
 
-### `oneOf`
+### `isOneOf`
 
 Create a validator that asserts that at least one of the validators passed as arguments are passing.
 
 ```ts
-const isAbc = oneOf(is('a'), is('b'), is('c'))
+const isAbc = isOneOf(is('a'), is('b'), is('c'))
 isAbc('a') // => true
 isAbc('b') // => true
 isAbc('c') // => true
@@ -76,7 +76,7 @@ A validator that asserts that the given argument is `undefined`. Short for `is(u
 ### `isNullOrUndefined`, `isNullish`
 
 A validator that asserts that the given argument is `null` or `undefined` (like doing `arg == null`).
-Short for `oneOf(is(null), is(undefined))`.
+Short for `isOneOf(is(null), is(undefined))`.
 
 An alias with a shorten yet recognizable name is `isNullish`.
 
@@ -127,7 +127,7 @@ areNumbers([1, 2, undefined]) // => false
 Of course, feel free to combine validators.
 
 ```ts
-const areKindaNumbers = isArrayOf(oneOf(isNumber, isNullOrUndefined))
+const areKindaNumbers = isArrayOf(isOneOf(isNumber, isNullOrUndefined))
 areNumbers([1, 2, 3]) // => true
 areNumbers([1, 2, null, 4, undefined]) // => true
 ```
@@ -180,7 +180,7 @@ Create a validator which utilizes an already created validator but allows `undef
 ```ts
 const fullUser = isOfShape({ name: isString, age: isNumber })
 const partOfUser1 = partial(fullUser)
-const partOfUser2 = isOfShape({ name: one(isUndefined, isString), age: oneOf(isUndefined, isNumber) })
+const partOfUser2 = isOfShape({ name: one(isUndefined, isString), age: isOneOf(isUndefined, isNumber) })
 // the two consts above produce the same validator
 ```
 

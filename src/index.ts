@@ -3,7 +3,7 @@ import { Basic, BasicString, Dict, Guard, GuardWithShape, Omit, Shape, StringToB
 
 export { Guard, GuardWithShape, Dict, Shape, Omit, FromGuard }
 
-export const oneOf = fp.or
+export const isOneOf = fp.or
 export { fp }
 
 export function is<T> (t: T) {
@@ -41,7 +41,7 @@ export const isUndefined: (arg: any) => arg is undefined = is(undefined)
  * Create a validator that asserts the passed argument is either `null` or `undefined`,
  * just like `input == null`.
  */
-export const isNullOrUndefined = oneOf(isNull, isUndefined)
+export const isNullOrUndefined = isOneOf(isNull, isUndefined)
 
 /**
  * Alias for isNullOrUndefined.
@@ -220,7 +220,7 @@ export function omit<T extends Dict> (guard: GuardWithShape<T>, ...keys: Array<k
 export function partial<T extends Dict> (guard: GuardWithShape<T>): GuardWithShape<Partial<T>> {
   const resultShape: any = {}
   for (const key of Object.keys(guard.shape)) {
-    resultShape[key] = oneOf(isUndefined, guard.shape[key] as any)
+    resultShape[key] = isOneOf(isUndefined, guard.shape[key] as any)
   }
   return isOfShape(resultShape) as any
 }

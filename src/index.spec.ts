@@ -161,8 +161,8 @@ describe(`isArrayOf`, () => {
       expect(tg.isArrayOf(tg.isNumber)([])).to.equal(true)
     })
   })
-  describe(`oneOf(isNull, isUndefined, isNumber)`, () => {
-    const assert = tg.isArrayOf(tg.oneOf(tg.isNull, tg.isUndefined, tg.isNumber))
+  describe(`isOneOf(isNull, isUndefined, isNumber)`, () => {
+    const assert = tg.isArrayOf(tg.isOneOf(tg.isNull, tg.isUndefined, tg.isNumber))
     it(`allows all nulls`, () => {
       expect(assert([null, null, null])).to.equal(true)
     })
@@ -205,7 +205,7 @@ describe(`isObjectOfShape`, () => {
       foo: tg.isArrayOf(tg.isNumber),
       bar: {
         baz: tg.isString,
-        qux: tg.oneOf(tg.isNull, tg.isBoolean),
+        qux: tg.isOneOf(tg.isNull, tg.isBoolean),
       },
     })
     it(`returns true for an object matching the shape`, () => {
