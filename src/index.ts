@@ -47,7 +47,7 @@ export const isNullOrUndefined = isOneOf(isNull, isUndefined)
  * Alias for isNullOrUndefined.
  * Just like `input == null`.
  */
-export const isNullish = isNotNullOrUndefined
+export const isNullish = isNullOrUndefined
 
 /**
  * Create a validator that asserts the passed argument is not `null`,
