@@ -224,3 +224,23 @@ export function partial<T extends Dict> (guard: GuardWithShape<T>): GuardWithSha
   }
   return isOfShape(resultShape) as any
 }
+
+/**
+ * Create a utility function which will throw if the given condition is not satisfied,
+ * and which will return the correct type.
+ *
+ * @param guard
+ * @param defaultErrorMessage
+ */
+export function throwIf<T> (guard: Guard<T>, defaultErrorMessage: string = `Assertion failed.`) {
+
+  return <V>(input: V, additionalErrorMessage?: string): Exclude<V, T> => {
+    if (guard(input)) {
+      const errorMessage = [defaultErrorMessage, additionalErrorMessage].filter(isNotNullish).join(' ')
+      throw new Error(errorMessage)
+    }
+    return input as Exclude<V, T>
+
+  }
+
+}

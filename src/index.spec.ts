@@ -295,6 +295,25 @@ describe(`partial`, () => {
   })
 })
 
+describe(`throwIf`, () => {
+  it(`works for "null"`, () => {
+    const throwIfNull = tg.throwIf(tg.isNull, `Value was unexpectedly null.`)
+    const one = throwIfNull(1)
+    assert<IsExact<typeof one, number>>(true)
+    expect(one).to.equal(1)
+    expect(() => throwIfNull(null, `Additional.`)).to.throw(`Value was unexpectedly null. Additional.`)
+  })
+  it(`works for "number | string"`, () => {
+    const isNumberOrString = tg.fp.or(tg.isNumber, tg.isString)
+    const throwIfNumberOrString = tg.throwIf(isNumberOrString, `Value was number or string.`)
+    const input: string | number | object = {}
+    const result = throwIfNumberOrString(input)
+    assert<IsExact<typeof result, object>>(true)
+    expect(input).to.deep.equal({})
+    expect(() => throwIfNumberOrString(1)).to.throw(`Value was number or string.`)
+  })
+})
+
 function stringOrNull (): string | null {
   return Math.random() > 0.5 ? '' : null
 }

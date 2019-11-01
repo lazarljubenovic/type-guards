@@ -208,3 +208,33 @@ type User = FromGuard<typeof isUser> // : { name: string, age: number }
 
 This means that your codebase can have validators "just in case", but if you never use them, it will not increase your bundle size.
 You could also set up your build pipeline in such way that the validators are run only in development mode.
+
+## Run-time assertion
+
+You usually want to throw an exception at run-time in case the state of the application becomes unexpected.
+For example, you might have `public foo?: string` in the class, but at some place you're certain that `foo` must be defined.
+Instead of doing `this.foo!`, which is just a build-time assertion, you might want to perform a run-time assertion such as the following.
+
+
+```typescript
+if (this.foo === undefined) {
+  throw new Error(`Unexpected value "undefined".`) 
+}
+```
+
+TypeScript will properly assert here that `this.foo` is `Exclude<string | undefined, undefined>` below the `if` block, which boils down to `string`.
+
+However, this becomes quite annoying to write all the time.
+Hence, `throwIf` helper.
+
+```typescript
+const foo = tg.throwIf(tg.isUndefined)(this.foo)
+```
+
+Or, create a reusable function.
+This is the recommended way.
+
+```typescript
+const throwIfUndefined = tg.throwIf(tg.isUndefined, `Unexpected "undefined" value.`)
+const foo = throwIfUndefined(this.foo, `"this.foo" should've been defined here. Something's wrong.`)
+```
