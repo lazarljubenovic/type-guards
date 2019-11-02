@@ -1,6 +1,7 @@
 import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import * as tg from './index'
+import { assert, IsExact } from 'conditional-type-checks'
 
 describe(`fp`, () => {
 
@@ -21,6 +22,12 @@ describe(`fp`, () => {
   })
 
   describe(`or`, () => {
+    describe(`without guards`, () => {
+      const isEven = (n: number) => n % 2 == 0
+      const isLong = (n: string) => n.length > 10
+      const fn = tg.fp.or(isEven, isLong)
+      assert<IsExact<typeof fn, (n: number | string) => boolean>>(true)
+    })
     describe(`unary`, () => {
       const isEven = (n: number): n is number => n % 2 == 0
       const fn = tg.fp.or(isEven)

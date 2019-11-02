@@ -20,7 +20,7 @@ export type StringToBasic<T extends BasicString> =
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Dict = Record<string, any>
-export type Predicate = (input: any) => boolean
+export type Predicate<Input = any> = (input: Input) => boolean
 
 /**
  * A helper which allows you to utilize the type of validator without using the validator itself.
