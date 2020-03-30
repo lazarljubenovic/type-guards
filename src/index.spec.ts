@@ -253,6 +253,27 @@ describe('isOfExactShape', () => {
   })
 })
 
+describe(`isTuple`, () => {
+  it(`returns true when parameter is a tuple of one element`, () => {
+    expect(tg.isTuple(tg.isNumber)([1])).to.equal(true)
+  })
+  it(`returns true when parameter is a tuple of two elements`, () => {
+    expect(tg.isTuple(tg.isNumber, tg.isString)([1, 'a'])).to.equal(true)
+  })
+  it(`returns true when parameter is a tuple of three elements`, () => {
+    expect(tg.isTuple(tg.isNumber, tg.isString, tg.isNumber)([1, 'a', 1])).to.equal(true)
+  })
+  it(`works with complex guards too`, () => {
+    expect(tg.isTuple(tg.isOneOf(tg.isNumber, tg.isString), tg.isNumber)(['a', 1])).to.equal(true)
+  })
+  it(`returns false when parameter is not a tuple`, () => {  
+    expect(tg.isTuple(tg.isString)('foo')).to.equal(false)
+  })
+  it(`returns false when parameter doesn't match tuple's types`, () => {  
+    expect(tg.isTuple(tg.isString, tg.isNumber)([1, { foo: 'bar' }])).to.equal(false)
+  })
+})
+
 describe(`pick`, () => {
   const a = 'a', b = 'b', c = 'c'
   it(`grabs only one key from a larger shape`, () => {
