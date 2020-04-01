@@ -272,6 +272,9 @@ describe(`isTuple`, () => {
   it(`returns false when parameter doesn't match tuple's types`, () => {  
     expect(tg.isTuple(tg.isString, tg.isNumber)([1, { foo: 'bar' }])).to.equal(false)
   })
+  it(`returns false when number of tuple's elements is different than the number of provided guards`, () => {  
+    expect(tg.isTuple(tg.isString, tg.isNumber)(['foo', 1, 'baz'])).to.equal(false)
+  })
 })
 
 describe(`pick`, () => {

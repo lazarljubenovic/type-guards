@@ -170,7 +170,6 @@ isUser({name: 'John'}) // => false
 ### `isTuple`
 
 Create a validator that asserts that passed argument is a tuple of certain elements.
-Current limit for the tuple is that it's can have up to 3 elements.
 
 ```ts
 const isNamePair = isTuple(isString, isString)
@@ -178,6 +177,7 @@ const isNamePair = isTuple(isString, isString)
 isNamePair(['Walter', 'Jessie']) // => true
 isNamePair('Gustavo') // => false
 isNamePair(['Hector']) // => false
+isNamePair(['Walter', 'Jessie', 'Mike']) // => false
 ```
 
 ### `pick`
