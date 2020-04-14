@@ -190,6 +190,9 @@ describe(`isObjectOfShape`, () => {
     it(`doesn't allow extra keys`, () => {
       expect(assert({ foo: 1, bar: 2 })).to.equal(false)
     })
+    it(`returns false for null`, () => {
+      expect(assert(null)).to.equal(false)
+    })
     it(`is correctly typed`, () => {
       let input: {} = {}
       if (assert(input)) {

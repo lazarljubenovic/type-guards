@@ -145,7 +145,7 @@ export function isArrayOf<T> (itemGuard: Guard<T>): Guard<T[]> {
  */
 export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>> (shape: T): GuardWithShape<Unshape<T>> {
   const fn: any = (input: any): input is T => {
-    if (typeof input != 'object') return false
+    if (input === null || typeof input != 'object') return false
     const isNothingMissing = Object.keys(shape).every((key) => {
       const keyGuard: any = (shape as any)[key]
       if (typeof keyGuard == 'function') {
