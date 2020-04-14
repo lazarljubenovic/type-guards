@@ -187,6 +187,9 @@ describe(`isOfShape`, () => {
     it(`returns false for an object which does not match the shape`, () => {
       expect(assert({ bar: 2 })).to.equal(false)
     })
+    it(`returns false for null`, () => {
+      expect(assert(null)).to.equal(false)
+    })
     it(`is correctly typed`, () => {
       let input: {} = {}
       if (assert(input)) {
