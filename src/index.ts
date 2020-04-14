@@ -155,7 +155,7 @@ export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>> (shape:
       if (typeof keyGuard == 'function') {
         return key in input && (keyGuard as any)(input[key])
       } else if (typeof keyGuard == 'object') {
-        return isOfShape(keyGuard)(input[key])
+        return isOfShape(keyGuard, exact)(input[key])
       }
     })
     if (!isNothingMissing) return false
@@ -227,7 +227,7 @@ export function partial<T extends Dict> (guard: GuardWithShape<T>): GuardWithSha
   for (const key of Object.keys(guard.shape)) {
     resultShape[key] = isOneOf(isUndefined, guard.shape[key] as any)
   }
-  return isOfShape(resultShape) as any
+  return isOfShape(resultShape, guard.exact) as any
 }
 
 /**
