@@ -137,11 +137,14 @@ areNumbers([1, 2, null, 4, undefined]) // => true
 Create a validator that asserts that the given argument is an object,
 where each of the values of its keys correspond to the given shape.
 The shape is an object where the values are either new shapes or simple type checks.
+`isOfShape` allows objects that have extra keys.  See `isOfExactShape` to exclude
+objects having extra keys not defined by the shape.
 
 ```ts
 const isUser = isOfShape({ name: isString, age: isNumber })
 isUser({name: 'John', age: 21}) // => true
 isUser({name: 'John', years: 21}) // => false
+isUser({name: 'John', age: 21, years: 21}) // => true
 isUser({name: 'John'}) // => false
 
 const isCompany = isOfShape({
@@ -149,6 +152,19 @@ const isCompany = isOfShape({
   users: isArrayOf(isUser),
 })
 isCompany({name: 'Untitled', users: [{name: 'John', age: 21}]) // => true
+```
+
+### `isOfExactShape`
+
+The same as `isOfShape`, except that it excludes objects that have extra keys
+not defined by the shape.
+
+```ts
+const isUser = isOfExactShape({ name: isString, age: isNumber })
+isUser({name: 'John', age: 21}) // => true
+isUser({name: 'John', years: 21}) // => false
+isUser({name: 'John', age: 21, years: 21}) // => false
+isUser({name: 'John'}) // => false
 ```
 
 ### `pick`
