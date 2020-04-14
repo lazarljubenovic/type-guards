@@ -311,7 +311,7 @@ describe(`throwIf`, () => {
   it(`works for "null"`, () => {
     const throwIfNull = tg.throwIf(tg.isNull, `Value was unexpectedly null.`)
     const one = throwIfNull(1)
-    assert<IsExact<typeof one, number>>(true)
+    assert<IsExact<typeof one, 1>>(true)
     expect(one).to.equal(1)
     expect(() => throwIfNull(null, `Additional.`)).to.throw(`Value was unexpectedly null. Additional.`)
   })
