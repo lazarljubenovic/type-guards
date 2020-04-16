@@ -43,7 +43,7 @@ export type FromGuard<T> = T extends GuardWithShape<infer V> ? V :
 
 export type Guard<T> = (input: any) => input is T
 export type GuardWithKnownInputType <I, T extends I> = (input: I) => input is T
-export type GuardWithShape<T> = Guard<T> & { shape: Shape<T> }
+export type GuardWithShape<T> = Guard<T> & { shape: Shape<T>, exact: boolean }
 
 export type GuardOrShape<T> = T extends Primitive ? Guard<T> : Shape<T>
 export type Shape<T extends Dict> = { [key in keyof T]: GuardOrShape<T[key]> }
