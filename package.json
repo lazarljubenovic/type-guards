@@ -1,6 +1,6 @@
 {
   "name": "type-guards",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "A strongly-typed utility for runtime type checks.",
   "main": "./dist/cjs/index.js",
   "es2015": "./dist/es2015/index.js",
