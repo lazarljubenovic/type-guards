@@ -172,7 +172,6 @@ export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>> (shape:
 export function isTuple<A>(a: Guard<A>): Guard<[A]>
 export function isTuple<A, B>(a: Guard<A>, b: Guard<B>): Guard<[A, B]>
 export function isTuple<A, B, C>(a: Guard<A>, b: Guard<B>, c: Guard<C>): Guard<[A, B, C]>
-export function isTuple<A, B, C>(a: Guard<A>, b?: Guard<B>, c?: Guard<C>): Guard<[A]> | Guard<[A, B]> | Guard<[A, B, C]>
 export function isTuple (...guards: Guard<any>[]): Guard<any> {
   return ((input: any) => {
     if (!Array.isArray(input)) {
