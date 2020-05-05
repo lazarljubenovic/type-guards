@@ -167,6 +167,26 @@ export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>> (shape:
 }
 
 /**
+ * Create a validator that asserts that passed argument is a tuple of certain elements.
+ */
+export function isTuple<A>(a: Guard<A>): Guard<[A]>
+export function isTuple<A, B>(a: Guard<A>, b: Guard<B>): Guard<[A, B]>
+export function isTuple<A, B, C>(a: Guard<A>, b: Guard<B>, c: Guard<C>): Guard<[A, B, C]>
+export function isTuple (...guards: Guard<any>[]): Guard<any> {
+  return ((input: any) => {
+    if (!Array.isArray(input)) {
+      return false
+    }
+
+    if (input.length != guards.length) {
+      return false
+    }
+
+    return input.every((val, i) => guards[i](val))
+  }) as Guard<any>
+}
+
+/**
  * Create a validator which modifies an existing shape guard. Allows you to pick
  * one or more keys which you want to keep from the object, and discard others.
  *

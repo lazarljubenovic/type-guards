@@ -167,6 +167,19 @@ isUser({name: 'John', age: 21, years: 21}) // => false
 isUser({name: 'John'}) // => false
 ```
 
+### `isTuple`
+
+Create a validator that asserts that passed argument is a tuple of certain elements.
+
+```ts
+const isNamePair = isTuple(isString, isString)
+
+isNamePair(['Walter', 'Jessie']) // => true
+isNamePair('Gustavo') // => false
+isNamePair(['Hector']) // => false
+isNamePair(['Walter', 'Jessie', 'Mike']) // => false
+```
+
 ### `pick`
 
 Create a validator which utilizes an already created validator and picks only a part of it.
