@@ -1,3 +1,5 @@
+import isPlainObject from 'is-plain-object';
+
 import * as fp from './fp'
 import { Basic, BasicString, Dict, Guard, GuardWithShape, Omit, Shape, StringToBasic, Unshape, FromGuard } from './types'
 
@@ -149,7 +151,7 @@ export function isOfExactShape<V extends Dict, T extends Shape<V> = Shape<V>> (s
  */
 export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>> (shape: T, exact: boolean = false): GuardWithShape<Unshape<T>> {
   const fn: any = (input: any): input is T => {
-    if (input === null || typeof input != 'object') return false
+    if (!isPlainObject(input)) return false
     const isNothingMissing = Object.keys(shape).every((key) => {
       const keyGuard: any = (shape as any)[key]
       if (typeof keyGuard == 'function') {
