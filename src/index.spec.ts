@@ -239,6 +239,48 @@ describe(`isOfShape`, () => {
       }
     })
   })
+  describe(`asserting shape {foo?: number}`, () => {
+    const assert = tg.isOfShape({
+      foo: tg.isOneOf(tg.isNumber, tg.isUndefined)
+    })
+    it(`returns true for an object matching the shape with a value`, () => {
+      const input = { foo: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`returns true for an object explicitly matching the shape with undefined`, () => {
+      const input = { foo: undefined }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`returns true for an object implicitly matching the shape with undefined`, () => {
+      const input = {}
+      expect(assert(input)).to.equal(true)
+    })
+    it(`returns false for an object with an invalid "foo"`, () => {
+      const input = { foo: 'a' }
+      expect(assert(input)).to.equal(false)
+    })
+    it(`allows extra nested keys when the object matching the shape with a value`, () => {
+      const input = { foo: 1, bar: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`allows extra nested keys when the object explicitly matching the shape with undefined`, () => {
+      const input = { foo: undefined, bar: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`allows extra nested keys when the object implicitly matching the shape with undefined`, () => {
+      const input = { bar: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`is correctly typed`, () => {
+      let input: {} = {}
+      if (assert(input)) {
+        try {
+          noop(input.foo?.toExponential())
+        } catch {
+        }
+      }
+    })
+  })
 })
 
 describe('isOfExactShape', () => {
