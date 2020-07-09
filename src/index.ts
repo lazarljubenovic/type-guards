@@ -153,7 +153,7 @@ export function isOfShape<V extends Dict, T extends Shape<V> = Shape<V>> (shape:
     const isNothingMissing = Object.keys(shape).every((key) => {
       const keyGuard: any = (shape as any)[key]
       if (typeof keyGuard == 'function') {
-        return key in input && (keyGuard as any)(input[key])
+        return (keyGuard as any)(input[key])
       } else if (typeof keyGuard == 'object') {
         return isOfShape(keyGuard, exact)(input[key])
       }
