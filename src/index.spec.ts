@@ -239,6 +239,44 @@ describe(`isOfShape`, () => {
       }
     })
   })
+  describe(`asserting shape {foo?: number}`, () => {
+    const assert = tg.isOfShape({
+      foo: tg.optional(tg.isNumber)
+    })
+    it(`returns true for an optional property set to a value`, () => {
+      const input = { foo: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`returns true for an optional property not being set`, () => {
+      const input = {}
+      expect(assert(input)).to.equal(true)
+    })
+    it(`returns false for an optional property set to undefined`, () => {
+      const input = { foo: undefined }
+      expect(assert(input)).to.equal(false)
+    })
+    it(`returns false for an object with an invalid "foo"`, () => {
+      const input = { foo: 'a' }
+      expect(assert(input)).to.equal(false)
+    })
+    it(`allows extra nested keys when the object matching the shape with set optional`, () => {
+      const input = { foo: 1, bar: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`allows extra nested keys when the object matching the shape with unset optional`, () => {
+      const input = { bar: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`is correctly typed`, () => {
+      let input: {} = {}
+      if (assert(input)) {
+        try {
+          noop(input.foo?.toExponential())
+        } catch {
+        }
+      }
+    })
+  })
 })
 
 describe('isOfExactShape', () => {
@@ -249,6 +287,31 @@ describe('isOfExactShape', () => {
     })
     it(`returns false for an object matching the shape with additional props`, () => {
       expect(assert({ foo: 1, bar: 2 })).to.equal(false)
+    })
+  })
+  describe(`asserting shape {foo?: number}`, () => {
+    const assert = tg.isOfExactShape({
+      foo: tg.optional(tg.isNumber)
+    })
+    it(`returns true for an object matching the shape with set optional`, () => {
+      const input = { foo: 1 }
+      expect(assert(input)).to.equal(true)
+    })
+    it(`returns true for an object matching the shape with unset optional`, () => {
+      const input = {}
+      expect(assert(input)).to.equal(true)
+    })
+    it(`returns false for an optional property set to undefined`, () => {
+      const input = { foo: undefined }
+      expect(assert(input)).to.equal(false)
+    })
+    it(`returns false for an object matching the shape with set optional with additional props`, () => {
+      const input = { foo: 1, bar: 1 }
+      expect(assert(input)).to.equal(false)
+    })
+    it(`returns false for an object matching the shape with unset optional with additional props`, () => {
+      const input = { bar: 1 }
+      expect(assert(input)).to.equal(false)
     })
   })
 })
@@ -266,13 +329,13 @@ describe(`isTuple`, () => {
   it(`works with complex guards too`, () => {
     expect(tg.isTuple(tg.isOneOf(tg.isNumber, tg.isString), tg.isNumber)(['a', 1])).to.equal(true)
   })
-  it(`returns false when parameter is not a tuple`, () => {  
+  it(`returns false when parameter is not a tuple`, () => {
     expect(tg.isTuple(tg.isString)('foo')).to.equal(false)
   })
-  it(`returns false when parameter doesn't match tuple's types`, () => {  
+  it(`returns false when parameter doesn't match tuple's types`, () => {
     expect(tg.isTuple(tg.isString, tg.isNumber)([1, { foo: 'bar' }])).to.equal(false)
   })
-  it(`returns false when number of tuple's elements is different than the number of provided guards`, () => {  
+  it(`returns false when number of tuple's elements is different than the number of provided guards`, () => {
     expect(tg.isTuple(tg.isString, tg.isNumber)(['foo', 1, 'baz'])).to.equal(false)
   })
 })
