@@ -1,14 +1,11 @@
 {
+  "extends": "./tsconfig.json",
   "exclude": [
     "**/*.spec.ts"
   ],
   "compilerOptions": {
-    "target": "es2015",
     "module": "commonjs",
-    "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./dist/cjs",
-    "strict": true,
-    "esModuleInterop": true
+    "outDir": "./dist/cjs"
   }
 }

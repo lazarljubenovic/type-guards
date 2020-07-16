@@ -57,9 +57,8 @@ describe(`isNotNull`, () => {
       assert<IsExact<typeof value, string>>(true)
       assert<IsNullable<typeof value>>(false)
     } else {
-      assert<IsExact<typeof value, never>>(true) // https://stackoverflow.com/q/56949854/2131286
-      // assert<IsExact<typeof value, string | null>>(true)
-      // assert<IsNullable<typeof value>>(true)
+      assert<IsExact<typeof value, null>>(true)
+      assert<IsNullable<typeof value>>(true)
     }
   })
 })
@@ -76,9 +75,8 @@ describe(`isNotNullOrUndefined`, () => {
       assert<IsExact<typeof value, string>>(true)
       assert<IsNullable<typeof value>>(false)
     } else {
-      assert<IsExact<typeof value, never>>(true) // https://stackoverflow.com/q/56949854/2131286
-      // assert<IsExact<typeof value, string | null>>(true)
-      // assert<IsNullable<typeof value>>(true)
+      assert<IsExact<typeof value, null>>(true)
+      assert<IsNullable<typeof value>>(true)
     }
   })
 })
