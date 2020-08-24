@@ -1,3 +1,5 @@
+import { optionalSymbol } from './symbols';
+
 export type BasicString = 'string' | 'boolean' | 'number' | 'object' | 'function'
 export type Primitive = string | boolean | number
 export type Basic = Primitive | object | Function
@@ -21,6 +23,7 @@ export type StringToBasic<T extends BasicString> =
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Dict = Record<string, any>
 export type Predicate<Input = any> = (input: Input) => boolean
+export type Optional<T> = T | undefined;
 
 /**
  * A helper which allows you to utilize the type of validator without using the validator itself.
@@ -44,6 +47,8 @@ export type FromGuard<T> = T extends GuardWithShape<infer V> ? V :
 export type Guard<T> = (input: any) => input is T
 export type GuardWithKnownInputType <I, T extends I> = (input: I) => input is T
 export type GuardWithShape<T> = Guard<T> & { shape: Shape<T>, exact: boolean }
+
+export type OptionalGuard<T> = ((input: unknown) => input is Optional<T>) & { [optionalSymbol]: true }
 
 export type GuardOrShape<T> = T extends Primitive ? Guard<T> : Shape<T>
 export type Shape<T extends Dict> = { [key in keyof T]: GuardOrShape<T[key]> }

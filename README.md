@@ -154,6 +154,30 @@ const isCompany = isOfShape({
 isCompany({name: 'Untitled', users: [{name: 'John', age: 21}]) // => true
 ```
 
+#### Optional Properties
+
+If a property can optionally be defined, wrap the type guard for it in `optional`.
+
+```ts
+type User = { name: string; preferredName?: string }
+const isUser = isOfShape({ name: isString, preferredName: optional(isString) })
+
+isUser({name: 'John'}) // => true
+isUser({name: 'John', preferredName: 'Johnny'}) // => true
+isUser({name: 'John', preferredName: undefined}) // => false - `preferredName` cannot be set to undefined.
+```
+
+Note: this is different from using `isOneOf` with `isUndefined`.
+
+```ts
+type User = { name: string; preferredName: string | undefined }
+const isUser = isOfShape({ name: isString, preferredName: isOneOf(isString, isUndefined) })
+
+isUser({name: 'John'}) // => false - `preferredName` must be defined.
+isUser({name: 'John', preferredName: 'Johnny'}) // => true
+isUser({name: 'John', preferredName: undefined}) // => true
+```
+
 ### `isOfExactShape`
 
 The same as `isOfShape`, except that it excludes objects that have extra keys
