@@ -135,6 +135,18 @@ describe(`isBoolean`, () => {
   })
 })
 
+describe(`isSymbol`, () => {
+  it(`returns true when a symbol is passed`, () => {
+    expect(tg.isSymbol(Symbol('foo'))).to.equal(true)
+  })
+  it(`returns false when a string is passed`, () => {
+    expect(tg.isSymbol('foo')).to.equal(false)
+  })
+  it(`returns false when a symbol wrapper object is passed`, () => {
+    expect(tg.isSymbol(Object(Symbol('foo')))).to.equal(false)
+  })
+})
+
 describe(`isEnum`, () => {
   it(`returns true when it belongs to enum`, () => {
     expect(tg.isEnum(1, 2, 3)(1)).to.equal(true)
