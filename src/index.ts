@@ -99,8 +99,8 @@ export const isString = isOfBasicType('string')
 export const isBoolean = isOfBasicType('boolean')
 
 /**
- * Create a validator that asserts the passed argument is of type `'boolean'`,
- * just like `typeof input == 'boolean'`.
+ * Create a validator that asserts the passed argument is of type `'symbol'`,
+ * just like `typeof input == 'symbol'`.
  */
 export const isSymbol = isOfBasicType('symbol')
 
