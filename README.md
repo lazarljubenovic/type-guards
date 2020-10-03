@@ -97,9 +97,9 @@ const filtered = array.filter(tg.isNotNullish)
 ### `isOfBasicType`
 
 Create a validator that asserts that the given argument is of a certain type.
-This is a wrapper around `typeof` checks and works with `string`, `number`, `boolean`, `function` and `object`.
+This is a wrapper around `typeof` checks and works with `string`, `number`, `boolean`, `symbol`, `function` and `object`.
 
-### `isString`, `isNumber`, `isBoolean`, `isObject`, `isFunction`.
+### `isString`, `isNumber`, `isBoolean`, `isSymbol`, `isObject`, `isFunction`.
 
 Validators that assert that the given argument is of the correct type.
 Short for `isOfBasicType('string')`, `isOfBasicType('number')`, etc.
