@@ -26,6 +26,12 @@ export function isInstanceOf<T> (ctor: (new (...args: any[]) => T) | (Function &
 }
 
 /**
+ * Create a validator that asserts the passed argument is a Date instance,
+ * just like `input instanceof Date`.
+ */
+export const isDate = isInstanceOf(Date)
+
+/**
  * Create a validator that asserts the passed argument is exactly `null`,
  * just like `input === null`.
  */
