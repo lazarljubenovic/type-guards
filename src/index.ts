@@ -323,6 +323,6 @@ export function throwIf<T> (guard: Guard<T>, defaultErrorMessage: string = `Asse
  */
 export function isRecord<K, V> (keyGuard: Guard<K>, valueGuard: Guard<V>) {
   return (input: any): input is Record<K, V> => isObject(input) && isNotNull(input) && Object.keys(input).every((k) => {
-	  return keyGuard(k) && valueGuard(input[k)
+	  return keyGuard(k) && valueGuard(input[k])
   })
 }
