@@ -22,6 +22,10 @@ export function isAny(t: unknown): t is any {
   return true
 }
 
+export function isUnknown(t: unknown): t is unknown {
+  return true
+}
+
 export function isNever(t: unknown): t is never {
   return false
 }
