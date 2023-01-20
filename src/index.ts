@@ -18,6 +18,14 @@ export function isOfBasicType<T extends BasicString> (basicString: T): Guard<Str
   return ((input: any) => typeof input == basicString) as Guard<StringToBasic<T>>
 }
 
+export function isAny(t: unknown): t is any {
+  return true
+}
+
+export function isNever(t: unknown): t is never {
+  return false
+}
+
 /**
  * Create a validator that asserts the passed argument is instance of the given constructor.
  */
