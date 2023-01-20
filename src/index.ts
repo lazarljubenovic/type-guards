@@ -317,3 +317,10 @@ export function throwIf<T> (guard: Guard<T>, defaultErrorMessage: string = `Asse
   }
 
 }
+
+/**
+ * Create a validator that asserts the passed argument is a Record<K, V>
+ */
+export function isRecord<K, V> (keyGuard: Guard<K>, valueGuard: Guard<V>) {
+  return (input: any): input is Record<K, V> => isObject(input) && isNotNull(input) && Object.entries(input).every(([k, v]) => keyGuard(k) && valueGuard(v))
+}
