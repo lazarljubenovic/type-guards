@@ -105,6 +105,12 @@ export const isBoolean = isOfBasicType('boolean')
 export const isSymbol = isOfBasicType('symbol')
 
 /**
+ * Create a validator that asserts the passed argument is of type `'bigint'`,
+ * just like `typeof input == 'bigint'`.
+ */
+export const isBigint = isOfBasicType('bigint')
+
+/**
  * Create a validator that asserts the passed argument is of type `'function'`,
  * just like `typeof input == 'function'`.
  */
