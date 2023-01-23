@@ -26,6 +26,12 @@ export function isInstanceOf<T> (ctor: (new (...args: any[]) => T) | (Function &
 }
 
 /**
+ * Create a validator that asserts the passed argument is an instance of `Error`,
+ * just like `input instanceof Error`.
+ */
+export const isError = isInstanceOf(Error)
+
+/**
  * Create a validator that asserts the passed argument is exactly `null`,
  * just like `input === null`.
  */
