@@ -99,6 +99,18 @@ export const isString = isOfBasicType('string')
 export const isBoolean = isOfBasicType('boolean')
 
 /**
+ * Create a validator that asserts the passed argument is exactly `true`,
+ * just like `input === true`.
+ */
+export const isTrue: (arg: any) => arg is true = is(true)
+
+/**
+ * Create a validator that asserts the passed argument is exactly `false`,
+ * just like `input === false`.
+ */
+export const isFalse: (arg: any) => arg is false = is(false)
+
+/**
  * Create a validator that asserts the passed argument is of type `'symbol'`,
  * just like `typeof input == 'symbol'`.
  */
