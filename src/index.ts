@@ -18,6 +18,18 @@ export function isOfBasicType<T extends BasicString> (basicString: T): Guard<Str
   return ((input: any) => typeof input == basicString) as Guard<StringToBasic<T>>
 }
 
+export function isAny(t: unknown): t is any {
+  return true
+}
+
+export function isUnknown(t: unknown): t is unknown {
+  return true
+}
+
+export function isNever(t: unknown): t is never {
+  return false
+}
+
 /**
  * Create a validator that asserts the passed argument is instance of the given constructor.
  */
@@ -30,6 +42,12 @@ export function isInstanceOf<T> (ctor: (new (...args: any[]) => T) | (Function &
  * just like `input instanceof Error`.
  */
 export const isError = isInstanceOf(Error)
+
+/**
+ * Create a validator that asserts the passed argument is a Date instance,
+ * just like `input instanceof Date`.
+ */
+export const isDate = isInstanceOf(Date)
 
 /**
  * Create a validator that asserts the passed argument is exactly `null`,
@@ -105,10 +123,28 @@ export const isString = isOfBasicType('string')
 export const isBoolean = isOfBasicType('boolean')
 
 /**
+ * Create a validator that asserts the passed argument is exactly `true`,
+ * just like `input === true`.
+ */
+export const isTrue: (arg: any) => arg is true = is(true)
+
+/**
+ * Create a validator that asserts the passed argument is exactly `false`,
+ * just like `input === false`.
+ */
+export const isFalse: (arg: any) => arg is false = is(false)
+
+/**
  * Create a validator that asserts the passed argument is of type `'symbol'`,
  * just like `typeof input == 'symbol'`.
  */
 export const isSymbol = isOfBasicType('symbol')
+
+/**
+ * Create a validator that asserts the passed argument is of type `'bigint'`,
+ * just like `typeof input == 'bigint'`.
+ */
+export const isBigint = isOfBasicType('bigint')
 
 /**
  * Create a validator that asserts the passed argument is of type `'function'`,
