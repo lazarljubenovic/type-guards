@@ -1,5 +1,5 @@
-export type BasicString = 'string' | 'boolean' | 'number' | 'object' | 'function' | 'symbol'
-export type Primitive = string | boolean | number | symbol
+export type BasicString = 'string' | 'boolean' | 'number' | 'object' | 'function' | 'symbol' | 'bigint'
+export type Primitive = string | boolean | number | symbol | bigint
 export type Basic = Primitive | object | Function
 
 export type BasicToString<T extends Basic> =
@@ -9,7 +9,8 @@ export type BasicToString<T extends Basic> =
         T extends Function ? 'function' :
           T extends object ? 'object' :
             T extends symbol ? 'symbol' :
-              never
+	      T extends bigint ? 'bigint' :
+                never
 
 export type StringToBasic<T extends BasicString> =
   T extends 'string' ? string :
@@ -18,7 +19,8 @@ export type StringToBasic<T extends BasicString> =
         T extends 'function' ? Function :
           T extends 'object' ? object :
             T extends 'symbol' ? symbol :
-              never
+	      T extends 'bigint' ? bigint :
+                never
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type Dict = Record<string, any>
