@@ -323,6 +323,6 @@ export function throwIf<T> (guard: Guard<T>, defaultErrorMessage: string = `Asse
  */
 export function isPartialRecord<K extends string | number | symbol, V> (keyGuard: Guard<K>, valueGuard: Guard<V>) {
   return (input: any): input is Partial<Record<K, V>> => isObject(input) && isNotNull(input) && Object.keys(input).every((k) => {
-	  return keyGuard(k) && valueGuard(input[k])
+	  return keyGuard(k) && valueGuard((input as any)[k])
   })
 }
