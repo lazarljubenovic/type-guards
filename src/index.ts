@@ -319,10 +319,10 @@ export function throwIf<T> (guard: Guard<T>, defaultErrorMessage: string = `Asse
 }
 
 /**
- * Create a validator that asserts the passed argument is a Record<K, V>
+ * Create a validator that asserts the passed argument is a Partial<Record<K, V>>
  */
-export function isRecord<K, V> (keyGuard: Guard<K>, valueGuard: Guard<V>) {
-  return (input: any): input is Record<K, V> => isObject(input) && isNotNull(input) && Object.keys(input).every((k) => {
+export function isPartialRecord<K, V> (keyGuard: Guard<K>, valueGuard: Guard<V>) {
+  return (input: any): input is Partial<Record<K, V>> => isObject(input) && isNotNull(input) && Object.keys(input).every((k) => {
 	  return keyGuard(k) && valueGuard(input[k])
   })
 }
