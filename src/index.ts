@@ -321,7 +321,7 @@ export function throwIf<T> (guard: Guard<T>, defaultErrorMessage: string = `Asse
 /**
  * Create a validator that asserts the passed argument is a Partial<Record<K, V>>
  */
-export function isPartialRecord<K, V> (keyGuard: Guard<K>, valueGuard: Guard<V>) {
+export function isPartialRecord<K extends string | number | symbol, V> (keyGuard: Guard<K>, valueGuard: Guard<V>) {
   return (input: any): input is Partial<Record<K, V>> => isObject(input) && isNotNull(input) && Object.keys(input).every((k) => {
 	  return keyGuard(k) && valueGuard((input as any)[k])
   })
